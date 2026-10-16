@@ -1,0 +1,19 @@
+{
+  "name": "daywell",
+  "version": "0.1.0",
+  "description": "Local-first home records for your AI agent: original documents, sourced facts and correction history, stored in SQLite and reached through a CLI.",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "daywell": "services/daywell/cli.js" },
+  "files": ["services/daywell/*.js", "!services/daywell/*.test.js", "prototypes/daywell-demo/assets/vehicles/catalog.js", "skills", "docs", "LICENSE", "README.md"],
+  "scripts": {
+    "daywell": "node services/daywell/cli.js",
+    "setup": "node services/daywell/cli.js setup",
+    "test": "node --test services/daywell/cli.test.js services/daywell/ownership-task.test.js"
+  },
+  "engines": { "node": ">=22.16" },
+  "dependencies": {
+    "zod": "^3.25.0",
+    "zod-to-json-schema": "^3.25.2"
+  }
+}
