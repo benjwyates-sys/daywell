@@ -4,7 +4,15 @@ Local-first home records for your AI agent. Daywell keeps a homeowner's applianc
 
 Your agent does the reading and reasoning. Daywell stores what it supplies, validates shape and references (not truth), and never calls a model, runs OCR, reads email or books anything.
 
-## Quick start (inside your agent's VM, e.g. Muse or Dot)
+## Get started: paste this to your agent
+
+You don't need a terminal. Open a new conversation with your agent (Muse, Dot or any agent that can run shell commands in its own VM) and paste:
+
+> Please set up Daywell to keep my home records. Run `npx --yes github:benjwyates-sys/daywell setup` in your shell, then read the skill file whose path it prints and follow it. Never write to Daywell's files yourself; use only the `daywell` command. Then start with `call get_agent_context` and ask me what I'd like help with first. Use my own documents and what I tell you; don't look anything up without asking me.
+
+Your agent runs the commands, so the records live in its VM, not on your computer. Ask it to run `backup` and hand you the file now and then.
+
+## Quick start for agents and developers
 
 Requires Node 22.16+ and an agent that can run shell commands.
 
