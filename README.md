@@ -8,7 +8,7 @@ Your agent does the reading and reasoning. Daywell stores what it supplies, vali
 
 You don't need a terminal. Open a new conversation with your agent (Muse, Dot or any agent that can run shell commands in its own VM) and paste:
 
-> Please set up Daywell to keep my home records. Run `npx --yes github:benjwyates-sys/daywell setup` in your shell, then read the skill file whose path it prints and follow it. Never write to Daywell's files yourself; use only the `daywell` command. Then start with `call get_agent_context` and ask me what I'd like help with first. Use my own documents and what I tell you; don't look anything up without asking me.
+> Please set up Daywell to keep my home records. Run `npx --yes github:benjwyates-sys/daywell setup` in your shell, then read the skill file whose path it prints and follow it. Never write to Daywell's files yourself; use only the `daywell` command. Then start with `call get_agent_context` and ask me what I'd like help with first. Use my documents and what I tell you, save relevant records, and research public manufacturer manuals, care instructions and troubleshooting using appliance models and generic symptoms. Follow through on useful steps and guide me with the next necessary question. Ask before sharing private information, contacting providers, booking, spending or setting reminders, and respect any limits or pauses I give you.
 
 Your agent runs the commands, so the records live in its VM, not on your computer. Ask it to run `backup` and hand you the file now and then.
 

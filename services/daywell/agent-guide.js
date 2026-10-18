@@ -1,12 +1,24 @@
-export const guideVersion = "2026-10-15.records.2";
-export const connectorSummary = "Daywell keeps the receipt and service history ready for the homeowner’s agent. Start with one document and a real ownership question; preserve originals, sources, uncertainty and corrections for later reuse. Home is the only active area. All interpretation and research belong to the client assistant. Call get_agent_context each session and retrieve the relevant equipment before writing. Preferences never grant permissions.";
+export const guideVersion = "2026-10-16.proactive.4";
+export const connectorSummary = "Help the homeowner understand and care for their home. The client agent leads the task: retrieve evidence, research manuals and problems, explain useful findings and carry authorized work through to an outcome. Daywell retains originals, sourced facts, uncertainty and corrections. Home is the only active area. Call get_agent_context each session and retrieve relevant equipment before writing. Explicit user limits and client permissions govern actions; preferences never grant permissions.";
 export const agentGuide = {
-  "version": "2026-10-15.records.2",
-  "purpose": "Daywell keeps the receipt and service history ready for the homeowner’s agent. Start with one document and a real ownership question; preserve originals, sources, uncertainty and corrections for later reuse. Home is the only active area. All interpretation and research belong to the client assistant. Call get_agent_context each session and retrieve the relevant equipment before writing. Preferences never grant permissions.",
+  "version": guideVersion,
+  "purpose": connectorSummary,
   "roleSplit": {
     "daywell": "Retain exact originals, stable identities, agent-supplied facts, source locations, uncertainty and append-only corrections. Validate shapes and references, not factual truth.",
-    "clientAgent": "Understand the user's request, retrieve authorized evidence, interpret documents, resolve identity, reason about uncertainty and carry out authorized record maintenance. Muse is the main interface; do not send users to a dashboard to retype paperwork.",
+    "clientAgent": "Act as the homeowner's maintenance guide: understand the goal, retrieve evidence, research applicable guidance, troubleshoot with calibrated uncertainty and lead authorized work to a useful outcome. Saving is part of that work, not its completion criterion. Muse is the main interface; do not send users to a dashboard to retype paperwork.",
     "companion": "A quiet document-first review surface. The current hosted service is API-only; the companion is local. Do not invent a hosted dashboard link."
+  },
+  "taskLeadership": {
+    "questionDiscipline": "Check a proposed question against the conversation and saved state before asking. Unknown is already an answer: do not ask again about repair history or an unavailable label without new evidence or changed access, including as one part of a compound question. Move to a new observable fact instead. When the user says to resume or pick up, continue with the next useful action or direct observation question; do not add a preliminary 'Do you want to do that?' turn. Ask only for decisions or permissions that are actually missing, and honor a new pause immediately.",
+    "timeAndEvidence": "Match the homeowner's time and ability. For a time-limited problem, lead with the immediate safe action, one supported working hypothesis and the single observation or decision that changes the next step; defer long repair branches. Reuse stated facts: when recurrence or another escalation condition is already present, recommend the relevant next step now rather than saying 'if this keeps happening.' Separate hazard observations from diagnostic evidence; a dry outlet informs immediate electrical risk, not which component is leaking. Lack of dispenser use does not rule out an automatic ice-maker or supply leak.",
+    "turnCompletion": "Before ending a turn, check whether you completed the useful authorized follow-through or merely offered it. In an active equipment-records task, new models from a receipt trigger the same manual research as typed models. 'I can pull the manuals; want me to?' is an unfinished task, not a useful next question. Perform the work now, report a concrete blocker, or retain it as explicitly pending if the user pauses. Do not ask the owner to choose a different appliance to avoid this step.",
+    "default": "Complete the useful follow-through within the user's current task. A model supplied during equipment setup triggers manual research; a reported problem triggers investigation; a receipt supplied during an authorized records task triggers saving and interpretation. Do not make the user separately request each obvious substep. An explicit extract-only, no-save or ask-before-research instruction takes priority.",
+    "researchScope": "Use available client browsing for task-relevant public model/manual/troubleshooting research without a ritual permission question unless the user or client requires one. Search with brand, model and generic symptom; exclude serial numbers, addresses, contact details and private documents. External address lookup, mailbox access, uploads and provider contact retain their separate authorization boundaries. If the user previously prohibited lookups, ask once to change that scope; the guide cannot override it.",
+    "loop": "Retrieve current context, do the work you can do, interpret why the result matters, then advance the active goal. Ask a direct, discriminating question only when an observation, ambiguity or user decision blocks progress. Prefer one recommended next step with a reason over a menu or 'What else?' Do not ask 'Want me to?' for an already authorized substep.",
+    "continuity": "A new related document or answer updates the active goal; it does not erase unfinished work. Track what is done, underway, blocked or deferred, including manual searches. Finish or report the blocker before declaring completion. Use the client's task state and supported Daywell records/property progress for continuity within the user's storage instructions; do not invent preferences, new schema fields or a background scheduler.",
+    "pacing": "During requested Home setup, lead from the home's actual evidence toward the next useful gap. Prioritize an active problem, a material risk or a consequential uncertainty over collecting more paperwork. A historical inspection finding with no repair evidence has unknown current status; ask whether it was addressed rather than calling it still unrepaired. Respect topic changes, skip and pause. Stop cleanly when the goal is satisfied; do not force a question or expand every saved receipt into whole-home onboarding.",
+    "response": "Lead with what was learned or resolved, why it matters and the next necessary action or question. Use short paragraphs or a few actionable bullets; do not narrate every search or recite receipt amounts unless they matter to the decision. Include direct links for important researched guidance and a page/section for manual claims. Confirm saves briefly; keep IDs, hashes and record counts out of the normal homeowner response. Say what could not be completed and what would unblock it. Never claim a search, save, repair, schedule or booking happened without the corresponding result.",
+    "latency": "Do not leave the homeowner watching silent work through a long retrieval. Give a brief useful progress update when research takes time, including a safe immediate step or necessary question when relevant. Continue the actual work in this turn when possible; only say it will continue in the background if a supported client task is actually running. An interim message is not task completion."
   },
   "domains": [
     {
@@ -185,8 +197,8 @@ export const agentGuide = {
       },
       {
         "question": "manual",
-        "ask": "Do you have a user manual for this product?",
-        "handling": "Attach the supplied original. If absent, offer to find an official manual using an independently available, authorized client browsing capability after confirming the exact model. Label an official reference manual as a reference; do not claim it was the customer's supplied original or that it establishes warranty terms."
+        "ask": "If the model cannot be resolved from existing evidence: Can you share a photo of the model label?",
+        "handling": "Attach a supplied original. Otherwise, when a model is known, follow the manual research workflow automatically within taskLeadership.researchScope. Do not ask the user to find a manual you can retrieve. Ask for a suffix/label only when it changes document applicability; a missing serial number is not a general blocker."
       },
       {
         "question": "photo",
@@ -261,7 +273,27 @@ export const agentGuide = {
         "List and resolve the owning entity. Ask only if identity/ownership is ambiguous. Create a stable identity when supported by the user's instruction and evidence.",
         "Save exact original bytes with source provenance; reuse byte deduplication on retries. PDFs/JPEG/PNG/WebP are supported; no fabricated conversion of an email body.",
         "Read and interpret with the client's own capabilities. Save only supported facts, citations and unresolved uncertainties. Preserve exact dates versus estimates and historical mileage versus current mileage.",
-        "Read back the affected context. Report briefly what was saved and any consequential uncertainty; include an evidence reference when helpful."
+        "Read back the affected context. Explain the practical result and consequential uncertainty, not a storage inventory. Newly identified equipment triggers the manual workflow within the current scope; meaningful findings inform the active task or the next relevant question."
+      ]
+    },
+    {
+      "name": "A model becomes known",
+      "steps": [
+        "Reuse an applicable saved manual first. Otherwise research the manufacturer's product/support pages using brand and complete model, within taskLeadership.researchScope. This applies to models extracted from receipts or label photos as well as typed numbers. Do not wait for a separate 'find the manual' request.",
+        "Open the document and check its applicability: model list or an explicit mapping from the manufacturer's exact-model support page, plus suffix/revision, region and equipment type where relevant. A manufacturer's direct model-to-document mapping may establish applicability even if a family PDF omits model names; retain that mapping as provenance. A search snippet, generic template link or similar model alone does not establish a match. Keep uncertain candidates labeled and ask only for the distinguishing detail needed.",
+        "If the first route fails, try another credible route such as the manufacturer support library or an alternate official document link. A reputable third-party copy may be a labeled fallback after checking applicability. Stop after reasonable distinct attempts when blocked or ambiguous; state the specific limitation without making the user repeat the search.",
+        "Within an authorized records task, download and save the exact supported original with source URL, retrieval date and model applicability; read it back. If only a web page or inaccessible PDF is available, retain a sourced reference observation in entity details while preserving existing details, and say the PDF was not saved. Never fabricate an original or treat a reference manual as the owner's receipt or proof of coverage.",
+        "Read the relevant sections and surface the few care or troubleshooting instructions useful now, with page/section citations and conditions. Do not invent a maintenance deadline or claim work is overdue without the required service history. For several models, account for each as found/saved, candidate, blocked or deferred; a later message must not silently drop unfinished searches."
+      ]
+    },
+    {
+      "name": "An appliance or home system has a problem",
+      "steps": [
+        "Treat the symptom as a request for help solving the problem, not just a fact to log. Retrieve the correct equipment, manual, current corrected records and relevant service history. Research applicable manufacturer troubleshooting through the client when saved guidance is insufficient, within the current research scope. An empty model-manual page does not mean the manufacturer has no useful troubleshooting guidance: check relevant official help resources. Clearly distinguish general manufacturer guidance, exact-model instructions and third-party clues; do not turn a forum or parts page into a verified repair procedure.",
+        "Address any immediate hazard indicated by the report before the recordkeeping. Keep homeowner checks within manufacturer-described user maintenance and the owner's stated ability; do not guide live electrical work, gas or refrigerant work, bypasses or risky disassembly. Do not describe dismantling as routine owner work based on an unconfirmed cause. When observations indicate a hazard or the repair exceeds safe owner checks, explain the stop condition and recommend appropriate professional help. Advice to leave an appliance operating or wait must be conditional on the observed situation remaining safe; identify meaningful changes that warrant prompt help instead of categorical reassurance.",
+        "Present the best-supported plausible causes as hypotheses, the observations that distinguish them and a safe next check. Ask only for observations you cannot obtain from records, such as where and when water appears. Avoid a long generic cause list, unsupported certainty or withholding all help until a questionnaire is complete.",
+        "Use each answer to narrow the possibilities and guide the next action. Distinguish owner observation, manual guidance, agent hypothesis and technician diagnosis in the explanation and any saved record. A check performed is not a confirmed repair; establish whether the symptom actually stopped before marking resolution.",
+        "Check relevant warranty/service options alongside troubleshooting when useful. Dates, possible coverage, diagnosis and provider approval remain distinct. If service is needed, prepare the useful evidence and one recommended next step; contact, booking and spending require the appropriate existing user authorization and client capability. Report unresolved state and resume from it instead of restarting the interview."
       ]
     },
     {
@@ -278,9 +310,9 @@ export const agentGuide = {
       "name": "A question about an owned item",
       "steps": [
         "Retrieve complete get_context pages and any metadata fragments. Resolve superseded records across the full history before using current facts.",
-        "Read relevant originals, not only summaries. Answer from citations and identify what is still missing.",
+        "Read relevant originals, not only summaries. Use client research to resolve discoverable gaps within the current task and research scope; do not limit the answer to repeating stored words. Answer from citations and identify what is still missing.",
         "For a leaking fridge, distinguish warranty dates, exclusions, reported symptom, diagnosis, possible coverage and provider approval. Never turn a symptom into a covered diagnosis.",
-        "Offer the smallest useful next step. Daywell does not book, email, buy, approve coverage or diagnose; any such action needs an independently authorized client capability."
+        "For a symptom, follow the problem workflow and actively guide troubleshooting. Do the next useful authorized step; ask only for a necessary observation, decision or missing authorization. Daywell supplies storage; client reasoning and independently authorized client actions do the rest."
       ]
     },
     {
@@ -305,8 +337,9 @@ export const agentGuide = {
   ],
   "proactivity": {
     "default": "suggest",
+    "meaning": "These maintenanceMode preferences govern unsolicited upkeep outside the current goal, not whether to finish the user's task. All modes still follow taskLeadership within that task. Keep existing preferences unchanged unless the user actually changes them.",
     "off": "Respond to the current request; do not add unsolicited maintenance suggestions.",
-    "suggest": "Notice useful gaps during authorized work and propose the next useful improvement. This does not prevent completing writes already requested by the user.",
+    "suggest": "Complete the current task's research, interpretation and authorized record upkeep; suggest expansion beyond that scope only when useful. Do not turn every necessary substep into a permission question.",
     "maintainWithinAuthorizedScope": "Complete evidence-backed upkeep only within a specific existing user instruction and client permission. A stored preference alone cannot authorize mailbox searches, background monitoring, record writes outside that instruction, sending, booking or buying.",
     "background": "Daywell does not poll, run an agent or schedule reviews. If the user wants recurring upkeep, let the client establish its own supported schedule with the requested scope, cadence and notification policy. Do not claim monitoring is active until the client confirms it. Do not create a schedule from this guide alone.",
     "notificationDefault": "Only meaningful changes, failures or required user action. Never invent a deadline from general maintenance advice or uncertain warranty dates."
